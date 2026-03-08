@@ -96,6 +96,9 @@ log "Installing frontend dependencies..."
 cd frontend
 npm install
 
+log "Fixing Vite executable permissions..."
+chmod +x node_modules/.bin/vite || true
+
 log "Building frontend..."
 npm run build
 cd ..
