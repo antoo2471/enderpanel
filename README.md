@@ -6,4 +6,6 @@ This panel is as the Not-Even-Alpha Stade, don't use it for anything important f
 
 
 installation
+```bash
 curl -fsSL https://raw.githubusercontent.com/antoo2471/enderpanel/main/install.sh | sh
+```
