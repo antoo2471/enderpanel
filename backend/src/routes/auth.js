@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import db from '../db.js';
-import { generateToken } from '../auth.js';
+import { generateToken, authMiddleware } from '../auth.js';
 
 const router = Router();
 
@@ -18,7 +18,7 @@ router.post('/login', (req, res) => {
   res.json({ token, user: { id: user.id, username: user.username, role: user.role } });
 });
 
-router.get('/me', (req, res) => {
+router.get('/me', authMiddleware, (req, res) => {
   const user = db.prepare('SELECT id, username, role, created_at FROM users WHERE id = ?').get(req.user.id);
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);

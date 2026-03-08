@@ -6,7 +6,8 @@ import db from '../db.js';
 const router = Router();
 
 function safePath(serverPath, relativePath) {
-  const resolved = path.resolve(serverPath, relativePath || '');
+  const safeRel = (relativePath || '').replace(/^[\/\\]+/, '');
+  const resolved = path.resolve(serverPath, safeRel);
   if (!resolved.startsWith(path.resolve(serverPath))) return null;
   return resolved;
 }

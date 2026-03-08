@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import fs from 'fs';
+import { pipeline } from 'stream/promises';
 import { fileURLToPath } from 'url';
 import db from '../db.js';
 import { adminOnly } from '../auth.js';
@@ -34,8 +35,8 @@ router.get('/:id', (req, res) => {
   res.json(server);
 });
 
-router.post('/', adminOnly, (req, res) => {
-  const { name, type, version, port, memory, rcon_port, rcon_password, java_args } = req.body;
+router.post('/', adminOnly, async (req, res) => {
+  const { name, type, version, port, memory, rcon_port, rcon_password, java_args, jarUrl } = req.body;
   if (!name) return res.status(400).json({ error: 'Server name required' });
 
   const id = uuidv4();
@@ -44,6 +45,26 @@ router.post('/', adminOnly, (req, res) => {
 
   const usedPort = port || 25565;
   const usedRconPort = rcon_port || (usedPort + 10);
+
+  if (jarUrl) {
+    try {
+      console.log(`[Servers] Downloading JAR for ${id} from ${jarUrl}`);
+      const response = await fetch(jarUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status} ${response.statusText}`);
+      
+      const fileStream = fs.createWriteStream(path.join(serverPath, 'server.jar'));
+      await pipeline(response.body, fileStream);
+      console.log(`[Servers] Download complete for ${id}`);
+    } catch (err) {
+      console.error(`[Servers] JAR download failed for ${id}:`, err.message);
+      if (fs.existsSync(path.join(serverPath, 'server.jar'))) {
+        fs.unlinkSync(path.join(serverPath, 'server.jar'));
+      }
+    }
+  }
+
+  // Pre-emptively accept EULA
+  fs.writeFileSync(path.join(serverPath, 'eula.txt'), 'eula=true\n');
 
   db.prepare(`INSERT INTO servers (id, name, type, version, port, memory, path, rcon_port, rcon_password, java_args) VALUES (?,?,?,?,?,?,?,?,?,?)`)
     .run(id, name, type || 'vanilla', version || '1.21.4', usedPort, memory || 1024, serverPath, usedRconPort, rcon_password || 'enderpanel', java_args || '');

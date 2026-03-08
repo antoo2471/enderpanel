@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/client.js';
 import ServerCard from '../components/ServerCard.jsx';
-import { Plus, Server, Cpu, MemoryStick, HardDrive, X } from 'lucide-react';
+import { Plus, Server, Cpu, MemoryStick, HardDrive } from 'lucide-react';
+import ServerWizard from '../components/ServerWizard.jsx';
 
 export default function Dashboard() {
   const [servers, setServers] = useState([]);
@@ -20,14 +21,9 @@ export default function Dashboard() {
     return () => clearInterval(interval);
   }, []);
 
-  const createServer = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await api.post('/servers', form);
-      setShowCreate(false);
-      setForm({ name: '', type: 'vanilla', version: '1.21.4', port: 25565, memory: 1024 });
-      navigate(`/servers/${res.data.id}`);
-    } catch {}
+  const handleServerCreated = (server) => {
+    setShowCreate(false);
+    navigate(`/servers/${server.id}`);
   };
 
   const running = servers.filter(s => s.online).length;
@@ -88,50 +84,10 @@ export default function Dashboard() {
       )}
 
       {showCreate && (
-        <div className="modal-overlay" onClick={() => setShowCreate(false)}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h2 style={{ margin: 0 }}>Create Server</h2>
-              <button className="btn-icon" onClick={() => setShowCreate(false)}><X size={18} /></button>
-            </div>
-            <form onSubmit={createServer}>
-              <div className="form-group">
-                <label>Server Name</label>
-                <input id="server-name" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required placeholder="My Server" />
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <div className="form-group">
-                  <label>Type</label>
-                  <select id="server-type" value={form.type} onChange={e => setForm({...form, type: e.target.value})}>
-                    <option value="vanilla">Vanilla</option>
-                    <option value="paper">Paper</option>
-                    <option value="spigot">Spigot</option>
-                    <option value="fabric">Fabric</option>
-                    <option value="forge">Forge</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Version</label>
-                  <input id="server-version" value={form.version} onChange={e => setForm({...form, version: e.target.value})} placeholder="1.21.4" />
-                </div>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                <div className="form-group">
-                  <label>Port</label>
-                  <input id="server-port" type="number" value={form.port} onChange={e => setForm({...form, port: parseInt(e.target.value)})} />
-                </div>
-                <div className="form-group">
-                  <label>Memory (MB)</label>
-                  <input id="server-memory" type="number" value={form.memory} onChange={e => setForm({...form, memory: parseInt(e.target.value)})} />
-                </div>
-              </div>
-              <div className="form-actions">
-                <button type="button" className="btn-secondary" onClick={() => setShowCreate(false)}>Cancel</button>
-                <button type="submit" className="btn-primary">Create Server</button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <ServerWizard 
+          onClose={() => setShowCreate(false)} 
+          onSuccess={handleServerCreated} 
+        />
       )}
     </div>
   );

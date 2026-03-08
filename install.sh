@@ -3,7 +3,7 @@ set -e
 
 PANEL_DIR="/opt/enderpanel"
 PANEL_USER="enderpanel"
-PANEL_REPO="https://github.com/enderpanel/enderpanel"
+PANEL_REPO="https://github.com/antoo2471/enderpanel"
 NODE_MIN_VERSION=18
 WEB_PORT=9172
 API_PORT=31357

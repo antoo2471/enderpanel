@@ -141,6 +141,6 @@ const styles = {
     borderBottom: '2px solid transparent', transition: 'all 150ms ease',
     whiteSpace: 'nowrap',
   },
-  tabActive: { color: '#3b82f6', borderBottomColor: '#3b82f6' },
+  tabActive: { color: '#3b82f6', borderBottom: '2px solid #3b82f6' },
   content: { flex: 1, overflow: 'hidden' },
 };

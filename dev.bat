@@ -43,6 +43,5 @@ echo Both servers are starting in separate windows.
 echo Press any key to stop all servers...
 pause >nul
 
-taskkill /fi "WINDOWTITLE eq EnderPanel Backend*" /f >nul 2>&1
-taskkill /fi "WINDOWTITLE eq EnderPanel Frontend*" /f >nul 2>&1
+taskkill /F /IM node.exe /T >nul 2>&1
 echo Servers stopped.

@@ -6,12 +6,11 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon --watch src src/index.js"
   },
   "dependencies": {
     "archiver": "^7.0.1",
     "bcryptjs": "^2.4.3",
-    "sql.js": "^1.11.0",
     "chokidar": "^4.0.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -22,8 +21,10 @@
     "node-cron": "^3.0.3",
     "pidusage": "^3.0.2",
     "rcon-client": "^4.2.4",
+    "sql.js": "^1.11.0",
     "ssh2": "^1.16.0",
     "tar": "^7.4.3",
+    "undici": "^7.22.0",
     "uuid": "^11.1.0",
     "ws": "^8.18.0"
   },
