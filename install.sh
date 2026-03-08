@@ -4,7 +4,7 @@ set -e
 PANEL_DIR="/opt/enderpanel"
 PANEL_USER="enderpanel"
 PANEL_REPO="https://github.com/antoo2471/enderpanel"
-NODE_MIN_VERSION=18
+NODE_MIN_VERSION=20
 WEB_PORT=9172
 API_PORT=31357
 SFTP_PORT=8382
@@ -43,7 +43,15 @@ fi
 
 NODE_VERSION=$(node -v | sed 's/v//' | cut -d. -f1)
 if [ "$NODE_VERSION" -lt "$NODE_MIN_VERSION" ]; then
-    err "Node.js $NODE_MIN_VERSION+ required (found v$NODE_VERSION)"
+    info "Upgrading Node.js to v20 LTS..."
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+    apt-get install -y nodejs
+    
+    # Re-check version
+    NODE_VERSION=$(node -v | sed 's/v//' | cut -d. -f1)
+    if [ "$NODE_VERSION" -lt "$NODE_MIN_VERSION" ]; then
+        err "Failed to upgrade Node.js. Node.js $NODE_MIN_VERSION+ required (found v$NODE_VERSION)"
+    fi
 fi
 log "Node.js $(node -v) OK"
 
@@ -86,6 +94,10 @@ cd ..
 log "Installing frontend dependencies..."
 cd frontend
 sudo -u "$PANEL_USER" npm install
+
+log "Fixing Vite permissions..."
+chown -R "$PANEL_USER:$PANEL_USER" node_modules
+
 log "Building frontend..."
 sudo -u "$PANEL_USER" npm run build
 cd ..
