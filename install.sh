@@ -6,7 +6,6 @@ PANEL_USER="enderpanel"
 PANEL_REPO="https://github.com/antoo2471/enderpanel"
 NODE_MIN_VERSION=20
 WEB_PORT=9172
-API_PORT=31357
 SFTP_PORT=8382
 
 RED='\033[0;31m'
@@ -122,7 +121,7 @@ ExecStart=/usr/bin/node src/index.js
 Restart=always
 RestartSec=5
 Environment=NODE_ENV=production
-Environment=PORT=$API_PORT
+Environment=PORT=$WEB_PORT
 Environment=HOST=0.0.0.0
 Environment=SFTP_PORT=$SFTP_PORT
 
@@ -160,7 +159,6 @@ log "  EnderPanel installed successfully!"
 log "======================================"
 echo ""
 info "Web Interface : http://$(hostname -I | awk '{print $1}'):$WEB_PORT"
-info "API (internal): http://127.0.0.1:$API_PORT"
 info "SFTP          : port $SFTP_PORT"
 info "Login         : admin / admin"
 echo ""

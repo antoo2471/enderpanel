@@ -33,3 +33,9 @@ pnpm-debug.log*
 *.sqlite
 *.key
 *.pub
+
+
+backend/data/enderpanel.db
+backend/data/servers/*
+backend/data/backups/*
+backend/data/keys/*
