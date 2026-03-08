@@ -67,11 +67,12 @@ if [ -d "$PANEL_DIR/.git" ]; then
     cd "$PANEL_DIR"
     sudo -u "$PANEL_USER" git pull
 else
-    log "Downloading EnderPanel..."
-    mkdir -p "$PANEL_DIR"
-    if [ -d "$PANEL_DIR" ] && [ "$(ls -A $PANEL_DIR 2>/dev/null)" ]; then
-        cp -r . "$PANEL_DIR/" 2>/dev/null || true
+    if [ -d "$PANEL_DIR" ]; then
+        log "Cleaning up previous failed installation..."
+        rm -rf "$PANEL_DIR"
     fi
+    log "Downloading EnderPanel..."
+    git clone "$PANEL_REPO.git" "$PANEL_DIR"
     chown -R "$PANEL_USER:$PANEL_USER" "$PANEL_DIR"
 fi
 
