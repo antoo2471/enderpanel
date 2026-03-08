@@ -73,7 +73,9 @@ fi
 if [ -d "$PANEL_DIR/.git" ]; then
     log "Updating existing installation..."
     cd "$PANEL_DIR"
-    sudo -u "$PANEL_USER" git pull
+    # Ensure root ownership during npm builds to prevent permission drops
+    chown -R root:root "$PANEL_DIR"
+    git pull
 else
     if [ -d "$PANEL_DIR" ]; then
         log "Cleaning up previous failed installation..."
@@ -81,7 +83,6 @@ else
     fi
     log "Downloading EnderPanel..."
     git clone "$PANEL_REPO.git" "$PANEL_DIR"
-    chown -R "$PANEL_USER:$PANEL_USER" "$PANEL_DIR"
 fi
 
 cd "$PANEL_DIR"
