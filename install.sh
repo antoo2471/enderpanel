@@ -88,18 +88,15 @@ cd "$PANEL_DIR"
 
 log "Installing backend dependencies..."
 cd backend
-sudo -u "$PANEL_USER" npm install --production
+npm install --production
 cd ..
 
 log "Installing frontend dependencies..."
 cd frontend
-sudo -u "$PANEL_USER" npm install
-
-log "Fixing Vite permissions..."
-chown -R "$PANEL_USER:$PANEL_USER" node_modules
+npm install
 
 log "Building frontend..."
-sudo -u "$PANEL_USER" npm run build
+npm run build
 cd ..
 
 mkdir -p "$PANEL_DIR/backend/data/servers"
