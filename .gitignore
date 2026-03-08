@@ -11,6 +11,8 @@ dist/
 build/
 backend/data/*
 !backend/data/.gitkeep
+backend/node_modules/*
+frontend/node_modules/*
 
 # Misc
 .DS_Store
