@@ -2,7 +2,7 @@
 Manage your minecraft
 
 
-This panel is as the Not-Even-Alpha Stade, don't use it for anything important for the moment, we are still working actively on it.
+This panel is as the Not-Even-Alpha Stade, don't use it for anything important for the moment, we are not working actively on it. Don't hesitate to fork the project
 
 
 installation
